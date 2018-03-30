@@ -1,0 +1,83 @@
+
+html{
+	height: 100%;
+	background:linear-gradient(-30deg, #a92854 , #E91E63);
+}
+.Heading{
+	position: relative;
+	height: 100px;
+	font-size: 50px;
+	line-height: 130px;
+	text-align: center;
+	font-family: "Indie Flower";
+	background-color: #232323;
+	color: white;
+}
+.Calculator{
+	width: 23%;
+	margin-left: 38%;
+	margin-top: 80px;
+	height: 450px;
+	font-family: "Indie Flower";
+	font-size: 25px;
+	background-color: #a29797;
+	border:2px solid #adadad;
+	border-radius: 11px;
+	
+}
+.Button_Grid{
+	display: grid;
+	width: 100%;
+	height: 75%;
+	grid-template-columns: repeat(4,1fr);
+	grid-gap: 1px;
+	text-align: center;
+	line-height: 65px;
+}
+.equalto{
+	background-color: red;
+	border-bottom-right-radius: 10px;
+}
+.Dot{
+	background-color: red;
+	border-bottom-left-radius: 10px;
+}
+.Display{
+	height: 25%;
+	padding-right: 25px;
+	padding-left: 25px;
+	background-color: #140a2d;
+	border-radius:10px 10px 0 0;
+	color: white;
+	line-height: 100px;
+	text-align: right;
+	font-size: 30px;
+	overflow: hidden;
+}
+.NumberPad{
+	background-color: #f9f5f5;
+}
+.NumberPad:hover{
+	background-color: #e8e5e5;
+}
+.NumberPad:active{
+	background-color: #e86363;
+}
+.OperationPad{
+	background-color: #c3bebe;
+}
+.OperationPad:hover{
+	background-color: #a09393;
+}
+.OperationPad:active{
+	background-color: #676767;
+}
+.ResultButton{
+	background-color: #b72f2f;
+}
+.ResultButton:active{
+	background-color: red;
+}
+span{
+	font-size: 20px;
+}
