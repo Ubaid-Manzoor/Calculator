@@ -57,7 +57,7 @@ html{
 .NumberPad{
 	background-color: #f9f5f5;
 }
-.NumberPad:hover{
+.NumberPad:hover,.NumberPadButtonPress{
 	background-color: #e8e5e5;
 }
 .NumberPad:active{
@@ -75,9 +75,12 @@ html{
 .ResultButton{
 	background-color: #b72f2f;
 }
-.ResultButton:active{
+.ResultButton:active,.ResultButtonPress{
 	background-color: red;
 }
 span{
 	font-size: 20px;
+}
+.OperationPadButtonPress{
+	background-color: #a09393;
 }
