@@ -1,4 +1,5 @@
 let Condition = 0;
+let EqualityCheck = 0;
 let Display_String = "";
 let OperatorString = ["*","-","+","/","%"];
 let String_Of_Operaters = ["NumpadDivide","NumpadAdd","NumpadSubtract"
@@ -6,25 +7,17 @@ let String_Of_Operaters = ["NumpadDivide","NumpadAdd","NumpadSubtract"
 							"Backslash","Backspace","ShiftRight","Delete",
 							"Equal","Minus","NumpadDecimal"];
 let String_Of_Operaters_Values = {
-	NumpadDivide :"/",
-	NumpadSubtract :"-",
-	NumpadAdd : "+",
-	NumpadDecimal : ".",
-	Equal : "+",
-	Minus : "-",
-	NumpadMultiply : "*",
-	NumpadEnter : "=",
-	Enter : "=",
-	Backslash : "%",
-	 Backspace : "B",
-	ShiftRight : "-F",
-	 Delete : "xx",
+	NumpadDivide :"/",NumpadSubtract :"-",NumpadAdd : "+",NumpadDecimal : ".",
+	Equal : "+",Minus : "-",NumpadMultiply : "*",NumpadEnter : "=",Enter : "=",
+	Backslash : "%", Backspace : "B",ShiftRight : "-F",Delete : "xx",
 };
+let AllButtons = document.querySelectorAll('.Button');
+let audio = document.querySelector('audio'); 
+// TO CHECK VAKUE_TO_CHECK IS A OPERATOR
 function IsOperator(Value_to_Check,Condition){
 	for(var i = 0 ; i  < 5 ; i++){
 		if(OperatorString[i] == Value_to_Check){
 				return true;
-			// return true;
 		}
 	}
 	if(Condition == 1 && Value_to_Check == "."){		
@@ -32,6 +25,7 @@ function IsOperator(Value_to_Check,Condition){
 	}
 	return false;
 }
+//TO CHECK LAST CHARACTER IS OPERATOR OR DOT
 function LastCharacterIsOperator() {
 	for(var i=0 ; i < 5 ; i++){
 		if(Display_String[Display_String.length] == OperatorString[i]){
@@ -40,6 +34,7 @@ function LastCharacterIsOperator() {
 	}
 	return false;
 }
+// TO CHECK IS THERE ALREADY DOT PRESENT 
 function IsAlreadyDotPresent() {
 	var D;
 	for(D = 0 ; D < Display_String.length ; D++){
@@ -67,7 +62,6 @@ function IsAlreadyDotPresent() {
 	return true;
 }
 window.addEventListener("keydown",function(e){
-	let audio = document.querySelector('audio'); 
 	let key = document.querySelector(`div[data-key="${e.keyCode}"]`);
 	let Key_Value = Number(e.key);
 	console.log(e);
@@ -78,14 +72,12 @@ window.addEventListener("keydown",function(e){
 		if(isNaN(Key_Value))
 		{
 			if(e.keyCode === 189){// - Key
-					audio.currentTime=0;
-					audio.play();
+					PlayAudio();
 					OnKeyPress(0,e.key,e.keyCode,e.code);
 					return;
 			}
 			else if(e.keyCode === 187){// + Key
-					audio.currentTime=0;
-					audio.play();
+					PlayAudio();
 					OnKeyPress(0,e.key,e.keyCode,e.code);
 					return;
 			}
@@ -93,8 +85,7 @@ window.addEventListener("keydown",function(e){
 			return;}
 		}
 		else{
-			audio.currentTime = 0;
-			audio.play();
+			PlayAudio();
 			OnKeyPress(0,e.key,e.keyCode,e.code);
 			return;
 		}
@@ -105,20 +96,25 @@ window.addEventListener("keydown",function(e){
 });
 function OnKeyPress(DecisionVariable,Key_value,KeyCode,Code) {
 	AddCssToKey(DecisionVariable,Key_value,KeyCode);
-	Change_InnerHtml_Of_Display(DecisionVariable,Key_value,KeyCode,Code);
+	Change_InnerHtml_Of_Display(Key_value,KeyCode,Code);
 }
-let AllButtons = document.querySelectorAll('.Button');
-function Change_InnerHtml_Of_Display(DecisionVariable,Key_value,KeyCode,Code) {
+function Change_InnerHtml_Of_Display(Key_value,KeyCode,Code) {
 	console.log(Key_value);
 	console.log(String_Of_Operaters.indexOf(Code));
 	if(!isNaN(Key_value)){
-		if(Display_String.length < 20){
+		if(EqualityCheck == 1){
+			Display_String = "";
+			ChangeInnerHtml(Display_String);
+			EqualityCheck = 0;
+		}
+		if(Display_String.length < 20 ){
 		if(!(Display_String[0] == 0 && Display_String.length == 1 && Key_value == 0)){// Fix the  Number
 			Display_String = Display_String + Key_value;                       // of Zero Before dot
 			ChangeInnerHtml(Display_String);} 
 		}
 	}
 	else if(String_Of_Operaters.indexOf(Code) != -1){
+			EqualityCheck = 0;
 			if(String_Of_Operaters_Values[Code] == "B"){//BackSpace
 				Display_String = Display_String.slice(0,Display_String.length - 1);
 				ChangeInnerHtml(Display_String);
@@ -136,14 +132,15 @@ function Change_InnerHtml_Of_Display(DecisionVariable,Key_value,KeyCode,Code) {
 			ChangeInnerHtml(Display_String);
 			return;
 		}
-		if(String_Of_Operaters_Values[Code] == "="){
+		if(String_Of_Operaters_Values[Code] == "="){// Result
 			if(LastCharacterIsOperator()){
 				return;
 			}
-			Display_String = eval(Display_String);
+			Display_String = eval(Display_String).toFixed(2);
 			Display_String = Display_String.toString();
 			ChangeInnerHtml(Display_String);
 			console.log(Display_String);
+			EqualityCheck = 1;
 			return;
 		}
 		if(Display_String.length < 19){//Fix Lenght of Digit in Display Of Calculator
@@ -160,9 +157,61 @@ function Change_InnerHtml_Of_Display(DecisionVariable,Key_value,KeyCode,Code) {
 		}	
 	}
 }
-function ChangeInnerHtml(Display_String) {
-	document.querySelector('.Display').innerHTML = Display_String;	
-}
+//====================================
+//====================================
+AllButtons.forEach(function(Button){
+	Button.addEventListener('click', function(Button){
+		PlayAudio();
+		console.log(Button.target.classList);
+		if(Button.target.innerHTML == "AC"){//DELETE BUTTON Done...
+			Display_String = "";
+			ChangeInnerHtml(Display_String);
+		}
+		else if(Button.target.innerHTML == "="){// enter button Done...
+			Display_String = eval(Display_String).toFixed(2);
+			Display_String = Display_String.toString();
+			ChangeInnerHtml(Display_String);
+		}
+		else if(Button.target.innerHTML == "+/-"){ // Shift Button Done..
+			if(!IsOperator(Display_String[0],0)){
+				Display_String = "-" + Display_String;
+				ChangeInnerHtml(Display_String);
+			}
+		}
+		else if(Button.target.classList.contains("BackSpace")){ //BackSpace Done..
+			console.log("Confirm");
+				Display_String = Display_String.slice(0,Display_String.length - 1);
+				ChangeInnerHtml(Display_String);
+		}
+		else if(Button.target.innerHTML == "x"){// For Multiply Button Done...
+			if(!IsOperator(Display_String[Display_String.length-1],1)){
+				Display_String = Display_String + "*";
+				ChangeInnerHtml(Display_String);
+			}
+		}
+		else{// 0->9,% ,.,+,-,/,%
+			if(!isNaN(Button.target.innerHTML)){
+				Display_String = Display_String + Button.target.innerHTML;
+				ChangeInnerHtml(Display_String);
+			}
+			else{
+				if(Button.target.innerHTML == "."){
+					if(!IsAlreadyDotPresent()){
+						Display_String = Display_String + ".";
+						ChangeInnerHtml(Display_String);
+					}
+				}
+				else{// -, + ,/ ,%
+					if(!(IsOperator(Display_String[Display_String.length-1],1))){
+						Display_String = Display_String + Button.target.innerHTML;
+						ChangeInnerHtml(Display_String);
+					}
+				}
+			}
+		}
+	});
+});
+
 function AddCssToKey(DecisionVariable,Key_value,KeyCode) {
 		if(Condition == 1){	
 		RemoveAllNewClasses();}
@@ -179,6 +228,7 @@ function AddCssToKey(DecisionVariable,Key_value,KeyCode) {
 			}
 		});
 }
+//TO REMOVE CSS OF PREVIOUS BUTTON WHEN WE CLICKED A NEW BUTTON
 function RemoveAllNewClasses() {
 	let Button = document.querySelector(".NumberPadButtonPress");
 	let OperationButton = document.querySelector(".OperationPadButtonPress");
@@ -187,8 +237,14 @@ function RemoveAllNewClasses() {
 	if(OperationButton != undefined)
 	OperationButton.classList.remove('OperationPadButtonPress');
 }
+//CHANGE THE DISPLAY ACCORDING TO INPUT
+function ChangeInnerHtml(Display_String) {
+	document.querySelector('.Display').innerHTML = Display_String;	
+}
+function PlayAudio() {
+	audio.currentTime=0;
+	audio.play();
+}
+
 let Calculator = document.querySelector('.Button_Grid');
 Calculator.addEventListener('mouseover', RemoveAllNewClasses);
-let operations = {
-
-};
