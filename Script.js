@@ -166,10 +166,12 @@ AllButtons.forEach(function(Button){
 		if(Button.target.innerHTML == "AC"){//DELETE BUTTON Done...
 			Display_String = "";
 			ChangeInnerHtml(Display_String);
+			EqualityCheck = 0;
 		}
 		else if(Button.target.innerHTML == "="){// enter button Done...
 			Display_String = eval(Display_String).toFixed(2);
 			Display_String = Display_String.toString();
+			EqualityCheck = 1;
 			ChangeInnerHtml(Display_String);
 		}
 		else if(Button.target.innerHTML == "+/-"){ // Shift Button Done..
@@ -182,29 +184,40 @@ AllButtons.forEach(function(Button){
 			console.log("Confirm");
 				Display_String = Display_String.slice(0,Display_String.length - 1);
 				ChangeInnerHtml(Display_String);
+				EqualityCheck = 0;
 		}
 		else if(Button.target.innerHTML == "x"){// For Multiply Button Done...
 			if(!IsOperator(Display_String[Display_String.length-1],1)){
 				Display_String = Display_String + "*";
 				ChangeInnerHtml(Display_String);
+				EqualityCheck = 0;
 			}
 		}
 		else{// 0->9,% ,.,+,-,/,%
 			if(!isNaN(Button.target.innerHTML)){
-				Display_String = Display_String + Button.target.innerHTML;
-				ChangeInnerHtml(Display_String);
+				if(EqualityCheck == 0){
+					Display_String = Display_String + Button.target.innerHTML;
+					ChangeInnerHtml(Display_String);
+				}
+				else {
+					Display_String = Button.target.innerHTML;
+					ChangeInnerHtml(Display_String);
+					EqualityCheck = 0;
+				}
 			}
 			else{
 				if(Button.target.innerHTML == "."){
 					if(!IsAlreadyDotPresent()){
 						Display_String = Display_String + ".";
 						ChangeInnerHtml(Display_String);
+						EqualityCheck = 0;
 					}
 				}
 				else{// -, + ,/ ,%
 					if(!(IsOperator(Display_String[Display_String.length-1],1))){
 						Display_String = Display_String + Button.target.innerHTML;
 						ChangeInnerHtml(Display_String);
+						EqualityCheck = 0;
 					}
 				}
 			}
