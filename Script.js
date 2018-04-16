@@ -99,7 +99,7 @@ function Change_InnerHtml_Of_Display(Key_value,KeyCode,Code) {
 			ChangeInnerHtml(Display_String);
 			EqualityCheck = 0;
 		}
-		if(Display_String.length < 20 ){
+		if(Display_String.length < 15 ){
 			if(!(Display_String[0] == 0 && Display_String.length == 1 && Key_value == 0)){// Fix the  Number
 				Display_String = Display_String + Key_value;                       // of Zero Before dot
 				ChangeInnerHtml(Display_String);} 
@@ -135,7 +135,7 @@ function Change_InnerHtml_Of_Display(Key_value,KeyCode,Code) {
 			EqualityCheck = 1;
 			return;
 		}
-		if(Display_String.length < 19){//Fix Lenght of Digit in Display Of Calculator
+		if(Display_String.length < 15){//Fix Lenght of Digit in Display Of Calculator
 			if(!(IsOperator(String_Of_Operaters_Values[Code],0)  &&  IsOperator(Display_String[Display_String.length - 1],1)))//Condition For Operator
 				if(!(String_Of_Operaters_Values[Code]=="." && (IsAlreadyDotPresent()))){									//overLoading
 					if(!(String_Of_Operaters_Values[Code] == "-F"))	
@@ -150,6 +150,7 @@ function Change_InnerHtml_Of_Display(Key_value,KeyCode,Code) {
 AllButtons.forEach(function(Button){
 	Button.addEventListener('click', function(Button){
 		PlayAudio();
+		if(Display_String.length < 15){
 		if(Button.target.innerHTML == "AC"){//DELETE BUTTON Done...
 			Display_String = "";
 			ChangeInnerHtml(Display_String);
@@ -208,7 +209,7 @@ AllButtons.forEach(function(Button){
 					}
 				}
 			}
-		}
+		}}
 	});
 });
 
